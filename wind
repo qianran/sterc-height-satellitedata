@@ -1,0 +1,79 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Dec  3 09:49:11 2018
+
+@author: zqr02
+"""
+
+#import netCDF4 as nc
+import matplotlib.pyplot as plt
+import netCDF4 as nc  
+from datetime import datetime, timedelta
+import pandas as pd
+import numpy as np
+import scipy.io
+from matplotlib.patches import Ellipse, Circle
+import math
+from mpl_toolkits.basemap import Basemap
+import skimage 
+import os
+import urllib
+import sys
+from decimal import *
+import numpy as np
+import matplotlib 
+
+import pylab
+import pandas as pd
+from matplotlib import animation
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+
+argostarttime=datetime(1950,1,1)
+windstarttime=datetime(1900,1,1)
+windspeed=[]
+argodata = scipy.io.loadmat('E:\\Python\\sh-adt-argo\\0.150.2\\SH_adtsla.mat')
+#print (argodata['argotime'])
+argolat=argodata['argolat']
+argolon=argodata['argolon']
+avisolat=argodata['avisolat']
+avisolon=argodata['avisolon']
+argotime=argodata['argotime']
+avisotime=argodata['avisotime']
+sla_d=argodata['diff_sla']
+adt_d=argodata['diff_adt']
+sh_d=argodata['diff_sh']
+for i in range(0,len(argotime[0]),1):
+    
+    argotime_date= argostarttime+timedelta(argotime[0][i])
+    #print (argotime_date.month)
+    
+    
+    wind_file=nc.Dataset("E:\\data\\windspeed\\2014\\%s.nc"  %argotime_date.month)
+    windtime=wind_file.variables['time'][:]
+    windlon=wind_file.variables['longitude'][:]
+    windlat=wind_file.variables['latitude'][:]
+    windu=wind_file.variables['u10'][:]
+    windv=wind_file.variables['v10'][:]
+
+    for i_windtime in range(0,len(windtime)):
+        windtime_data= windstarttime+timedelta(hours=float(windtime[i_windtime]))
+        for i_windlon in range(len(windlon)):
+            for i_windlat in range(len(windlat)):
+                if abs((windtime_data-argotime_date).total_seconds() )< 10799 and abs(argolat[0][i]-windlat[i_windlat])<0.062 and abs(argolon[0][i]-windlon[i_windlon])<0.062:
+                    wind_speed=math.sqrt(windv[i_windtime][i_windlat][i_windlon]*windv[i_windtime][i_windlat][i_windlon]+windu[i_windtime][i_windlat][i_windlon]*windu[i_windtime][i_windlat][i_windlon])
+                    print (i,wind_speed)
+                    windspeed.append(wind_speed)
+
+
+
+
+
+
+
+
+
+
+
+
+
