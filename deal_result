@@ -1,0 +1,57 @@
+load('E:\Python\sh-adt-argo\result_data_test0.150.21228.mat')
+
+%%%%%%%% 求某温度层的均方根误差 RMSD %%%%%%%%
+%方均根误差 RMSe=sqrt(sum((Ti-Ai).^2)/n) 
+%其中 Ti 是准确值数组，Ai 是模型的预计值数组，而n 是数据点的总个数
+% Argo_Reg=[Valid_plot(:,4),Valid_plot(:,5)];%%Argo和回归结果深度
+% RegNaN=find(isnan(Argo_Reg(:,1)-Argo_Reg(:,2)));
+% Argo_Reg(RegNaN,:)=[];
+% Argo_Reg_RMSD=sqrt(sum((Argo_Reg(:,1)-Argo_Reg(:,2)).^2)/(length(Valid_plot)-length(RegNaN)));%Argo与线性回归结果均方根偏差--RMSD 
+RMSD_sla=sqrt(sum((sla_d_a-sh_d_a).^2)/length(sla_d_a))
+RMSD_adt=sqrt(sum((adt_d_a-sh_d_a).^2)/length(adt_d_a))
+
+%%%%%%%% 求相关性 %%%%%%%%
+Rr_sla=corrcoef(sla_d_a,sh_d_a) %%Argo和回归结果深度的相关性
+Rr_adt=corrcoef(adt_d_a,sh_d_a) %%Argo和回归结果深度的相关性
+% if(length(Rr)>1)
+%     Argo_Reg_cor=Rr(1,2);%% Argo与线性回归结果相关性系数
+% else
+%     Argo_Reg_cor=NaN;%% Argo与线性回归结果相关性系数
+% end
+
+%%%%%%%%%% 求偏差 %%%%%%%%%%
+% bias=（模拟结果-Argo）/n 
+Argo_Reg_bias_sla=mean(sh_d_a-sla_d_a)%%Argo与线性相关结果偏差
+
+Profiles_sla=(length(sla_d_a))%%剖面个数
+Argo_Reg_bias_adt=mean(sh_d_a-adt_d_a)%%Argo与线性相关结果偏差
+
+Profiles_adt=(length(adt_d_a))%%剖面个数
+% Reg_RMSD=[Reg_RMSD;Argo_Reg_RMSD];%%Argo与线性回归结果均方根偏差--RMSD
+% Reg_cor=[Reg_cor;Argo_Reg_cor];%%Argo与线性回归结果相关性系数
+% Reg_bias=[Reg_bias;Argo_Reg_bias];%%Argo与线性相关结果偏差
+
+%%%% 之前算的erro错误，次处根据RMSD和mean的结果 单独计算error %%%%
+RMSD_sla_erro=(RMSD_sla/mean(abs(sh_d_a)))*100%Argo与线性相关结果UOHC误差
+RMSD_adt_erro=(RMSD_adt/mean(abs(sh_d_a)))*100%Argo与线性相关结果UOHC误差
+%error=
+sh_d_b=[ -0.0139, 0.0317, -0.0933,-0.1732, -0.0781, -0.1163, -0.0737,0.0680]
+sla_d_b=[ 0.0270, 0.0090,-0.1060, -0.1540, -0.1060, -0.1010,-0.0490, 0.0520]
+adt_d_b=[ 0.0290,0.0080, -0.1020,-0.1600, -0.1020 ,-0.1020, -0.0480, 0.0540]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%筛选后%%%%%%%%%%%%%%%
+
+RMSD_sla_b=sqrt(sum((sla_d_b-sh_d_b).^2)/length(sla_d_b))
+RMSD_adt_b=sqrt(sum((adt_d_b-sh_d_b).^2)/length(adt_d_b))
+Rr_sla_b=corrcoef(sla_d_b,sh_d_b) %%Argo和回归结果深度的相关性
+Rr_adt_b=corrcoef(adt_d_b,sh_d_b) %%Argo和回归结果深度的相关性
+Argo_Reg_bias_sla_b=mean(sh_d_b-sla_d_b)%%Argo与线性相关结果偏差
+
+Profiles_sla_b=(length(sla_d_b))%%剖面个数
+Argo_Reg_bias_adt_b=mean(sh_d_b-adt_d_b)%%Argo与线性相关结果偏差
+
+Profiles_adt_b=(length(adt_d_b))%%剖面个数
+
+RMSD_sla_erro_b=(RMSD_sla_b/mean(abs(sh_d_b)))*100%Argo与线性相关结果UOHC误差
+RMSD_adt_erro_b=(RMSD_adt_b/mean(abs(sh_d_b)))*100%Argo与线性相关结果UOHC误差
+
+
